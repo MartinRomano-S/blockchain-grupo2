@@ -1,29 +1,43 @@
 package blockchain;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+
+import structure.Block;
+import structure.Hasher;
+import transactions.Transaction;
+import transactions.TransactionWithCurrency;
 
 public class Main {
 	
-	static List<Block> blockChain;
+	static List<Block<?>> blockChain;
 
 	public static void main(String[] args) {
-		Transaction t = new Transaction();
-		t.setTransmitter("Messi");
-		t.setReceiver("Maradona");
-		t.setMount(300D);
 		
-		//Habría que ver como manejar los enlaces
-		//Supongo que con alguna utilidad de las collections tipo equalTo y eso
-		//Quizás haciendo un wrapper que obtenga el hash del último elemento y antes
-		//de guardar el nuevo, le setee el prevHash.
-		//Ver caso de bloque génesis
-		blockChain = new LinkedList<>();
+		blockChain = new ArrayList<>();
+		blockChain.add(new Block<Transaction>("0", new Transaction("Messi", "Maradona", 300D)));
+		blockChain.add(new Block<Transaction>(blockChain.get(blockChain.size() - 1).getHash(), new Transaction("Maradona", "Messi", 300D)));
+		blockChain.add(new Block<Transaction>(blockChain.get(blockChain.size() - 1).getHash(), new Transaction("Messi", "Pelé", 300D)));
+		blockChain.add(new Block<Transaction>(blockChain.get(blockChain.size() - 1).getHash(), new Transaction("Pelé", "Ronaldinho", 300D)));
+		blockChain.add(new Block<Transaction>(blockChain.get(blockChain.size() - 1).getHash(), new Transaction("Ronaldinho", "Ronaldo", 300D)));
+		blockChain.add(new Block<Transaction>(blockChain.get(blockChain.size() - 1).getHash(), new Transaction("Ronaldo", "Agüero", 300D)));
 		
-		String hash = HasherSHA256.hashSHA256Hex(t.toString());
-		System.out.println(hash);
+		if(Hasher.isValidChain(blockChain))
+			System.out.println("Transacción validada");
+		else
+			System.out.println("Transacción errónea");
 		
-		Block b = new Block();
+		blockChain.clear();
+		blockChain.add(new Block<TransactionWithCurrency>("0", new TransactionWithCurrency("Messi", "Maradona", "USD", 300D)));
+		blockChain.add(new Block<TransactionWithCurrency>(blockChain.get(blockChain.size() - 1).getHash(), new TransactionWithCurrency("Maradona", "Messi", "USD", 300D)));
+		blockChain.add(new Block<TransactionWithCurrency>(blockChain.get(blockChain.size() - 1).getHash(), new TransactionWithCurrency("Messi", "Pelé", "USD", 300D)));
+		blockChain.add(new Block<TransactionWithCurrency>(blockChain.get(blockChain.size() - 1).getHash(), new TransactionWithCurrency("Pelé", "Ronaldinho", "USD", 300D)));
+		blockChain.add(new Block<TransactionWithCurrency>(blockChain.get(blockChain.size() - 1).getHash(), new TransactionWithCurrency("Ronaldinho", "Ronaldo", "USD", 300D)));
+		blockChain.add(new Block<TransactionWithCurrency>(blockChain.get(blockChain.size() - 1).getHash(), new TransactionWithCurrency("Ronaldo", "Agüero", "USD", 300D)));
+		
+		if(Hasher.isValidChain(blockChain))
+			System.out.println("Transacción validada");
+		else
+			System.out.println("Transacción errónea");
 	}
 }
-

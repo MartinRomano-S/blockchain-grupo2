@@ -1,4 +1,4 @@
-package blockchain;
+package transactions;
 
 public class Transaction {
 

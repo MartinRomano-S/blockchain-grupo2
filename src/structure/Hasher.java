@@ -1,0 +1,67 @@
+package structure;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+
+public class Hasher {
+
+	/**
+	 * Método para hacer un hash en SHA-256 de una cadena
+	 * @param t: cadena a hashear
+	 * @return cadena hash en SHA-256
+	 */
+	public static String hashSHA256Hex(String t) {
+
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			byte[] encodedhash = digest.digest(t.getBytes(StandardCharsets.UTF_8));
+			
+			final StringBuilder hexString = new StringBuilder();
+	        for (int i = 0; i < encodedhash.length; i++) {
+	            final String hex = Integer.toHexString(0xff & encodedhash[i]);
+	            if(hex.length() == 1) 
+	              hexString.append('0');
+	            hexString.append(hex);
+	        }
+        
+        	return hexString.toString();
+		} catch (NoSuchAlgorithmException e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Método para validar la cadena de bloques.
+	 * @param blockChain: Cadena a validar
+	 * @return true en caso de válida y falso en caso de errónea
+	 */
+	public static boolean isValidChain(List<Block<?>> blockChain) {
+		
+		Block<?> current;
+		Block<?> previous;
+		
+		for(int i=1; i < blockChain.size(); i++) {
+			
+			current = blockChain.get(i);
+			previous = blockChain.get(i - 1);
+			
+			String currHash = current.getHash();
+			String previousHash = previous.getHash();
+			
+			System.out.println("Current: " + currHash + " | Prev: " + previousHash);
+			
+			//Primero nos fijamos que el hash del bloque actual sea válido volviendo a hashearlo
+			if(!currHash.equals(current.recalculateHash()))
+				return false;
+			
+			//Luego nos fijamos que el hash del bloque anterior sea válido comparándolo con
+			//el hash anterior que tiene el bloque actual
+			if(!previousHash.equals(current.getPrevHash()))
+				return false;
+		}
+		
+		return true;
+	}
+}
