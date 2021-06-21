@@ -37,12 +37,12 @@ public class Block<T> {
 		return data;
 	}
 
-	public void setTransaction(T data) {
+	public void setTransaction(final T data) {
 		this.data = data;
-		this.hash = Hasher.hashSHA256Hex(data.toString() + this.timeStamp);
+		this.hash = Hasher.hashSHA256Hex(this.prevHash + data.toString() + this.timeStamp);
 	}
 	
 	public String recalculateHash() {
-		return Hasher.hashSHA256Hex(data.toString() + timeStamp);
+		return Hasher.hashSHA256Hex(this.prevHash + data.toString() + timeStamp);
 	}
 }

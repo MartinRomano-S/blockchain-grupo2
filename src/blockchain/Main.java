@@ -22,6 +22,11 @@ public class Main {
 		blockChain.add(new Block<Transaction>(blockChain.get(blockChain.size() - 1).getHash(), new Transaction("Ronaldinho", "Ronaldo", 300D)));
 		blockChain.add(new Block<Transaction>(blockChain.get(blockChain.size() - 1).getHash(), new Transaction("Ronaldo", "Agüero", 300D)));
 		
+		//Prueba de modificación de transacción 2.
+		/*
+		Block<Transaction> b = (Block<Transaction>) blockChain.get(2);
+		b.setTransaction(new Transaction("Maradona", "Messi", 300D));
+		*/
 		if(Hasher.isValidChain(blockChain))
 			System.out.println("Transacción validada");
 		else
