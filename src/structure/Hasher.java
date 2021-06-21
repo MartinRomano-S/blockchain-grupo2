@@ -50,7 +50,38 @@ public class Hasher {
 			String currHash = current.getHash();
 			String previousHash = previous.getHash();
 			
-			System.out.println("Current: " + currHash + " | Prev: " + previousHash);
+			//Primero nos fijamos que el hash del bloque actual sea válido volviendo a hashearlo
+			if(!currHash.equals(current.recalculateHash()))
+				return false;
+			
+			//Luego nos fijamos que el hash del bloque anterior sea válido comparándolo con
+			//el hash anterior que tiene el bloque actual
+			if(!previousHash.equals(current.getPrevHash()))
+				return false;
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Método para validar la cadena de bloques Merkle.
+	 * La diferenciamos de la cadena normal para no generar confusión
+	 * con más interfaces y clases genéricas
+	 * @param blockChain: Cadena Merkle a validar
+	 * @return true en caso de válida y falso en caso de errónea
+	 */
+	public static boolean isValidMerkleChain(List<MerkleBlock<?>> blockChain) {
+		
+		MerkleBlock<?> current;
+		MerkleBlock<?> previous;
+		
+		for(int i=1; i < blockChain.size(); i++) {
+			
+			current = blockChain.get(i);
+			previous = blockChain.get(i - 1);
+			
+			String currHash = current.getHash();
+			String previousHash = previous.getHash();
 			
 			//Primero nos fijamos que el hash del bloque actual sea válido volviendo a hashearlo
 			if(!currHash.equals(current.recalculateHash()))
