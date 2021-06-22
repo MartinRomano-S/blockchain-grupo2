@@ -37,7 +37,7 @@ public class TransactionBlockChainTest {
 		initEach();
 		@SuppressWarnings("unchecked")
 		Block<Transaction> b = (Block<Transaction>) blockChain.get(2);
-		b.setTransaction(new Transaction("Maradona", "Messi", 300D));
+		b.setData(new Transaction("Maradona", "Messi", 300D));
 		
 		assertEquals(false, Hasher.isValidChain(blockChain));
 	}

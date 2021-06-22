@@ -37,7 +37,7 @@ public class Block<T> {
 		return data;
 	}
 
-	public void setTransaction(final T data) {
+	public void setData(final T data) {
 		this.data = data;
 		this.hash = Hasher.hashSHA256Hex(this.prevHash + data.toString() + this.timeStamp);
 	}
